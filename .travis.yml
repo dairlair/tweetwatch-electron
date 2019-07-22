@@ -33,6 +33,15 @@ cache:
 before_cache:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm -rf $HOME/.cache/electron-builder/wine; fi
 
+# These commands are executed before the scripts are executed
+install:
+  # On OS X we first need to install Yarn via Homebrew
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn; fi
+  # Install all dependencies listed in your package.json file
+  # - yarn
+
+script:
+
   - echo "Build linux version"
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn build linux; fi
 
