@@ -5,10 +5,14 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import "antd/dist/antd.css";
 import './index.css';
+import {Provider} from 'mobx-react';
+import { stores } from './stores';
 
 render((
     <BrowserRouter>
-        <App />
+        <Provider {...stores}>
+            <App />
+        </Provider>
     </BrowserRouter>
 ), document.getElementById('root'));
 

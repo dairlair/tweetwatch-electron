@@ -8,7 +8,6 @@ class Header extends React.Component {
   };
 
   handleClick = (e: { key: any; }) => {
-    console.log('click ', e);
     this.setState({
       current: e.key,
     });
