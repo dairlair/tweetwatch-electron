@@ -1,20 +1,17 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import Home from './Home'
-import Subjects from './Subjects'
+import { Layout } from 'antd';
 
-// The Main component renders one of the three provided
-// Routes (provided that one matches). Both the /roster
-// and /schedule routes will match any pathname that starts
-// with /roster or /schedule. The / route will only match
-// when the pathname is exactly the string "/"
+import Dashboard from '../pages/Dashboard'
+import Objects from '../pages/Objects'
+
 const Main = () => (
-  <main>
+  <Layout>
     <Switch>
-      <Route exact path='/' component={Home}/>
-      <Route path='/subjects' component={Subjects}/>
+      <Route exact path='/' component={Dashboard}/>
+      <Route path='/objects' component={Objects}/>
     </Switch>
-  </main>
+  </Layout>
 )
 
 export default Main

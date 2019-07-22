@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Home = () => (
+const Dashboard = () => (
   <div>
     <h1>Welcome to the TwetWatch app!</h1>
   </div>
 )
 
-export default Home
+export default Dashboard

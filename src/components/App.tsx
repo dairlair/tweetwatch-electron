@@ -1,15 +1,15 @@
 import React from 'react'
 import Header from './Header'
 import Main from './Main'
+import { Layout } from 'antd';
 
 const App: React.FC = () => {
     return (
-      <div className="App">
+      <Layout className="layout">
         <Header />
         <Main />
-      </div>
+      </Layout>
     );
 }
-
 
 export default App
