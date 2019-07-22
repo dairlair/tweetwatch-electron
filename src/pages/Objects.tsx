@@ -1,5 +1,5 @@
-import React from 'react'
-import Button from 'antd/es/button'
+import React from 'react';
+import Button from 'antd/es/button';
 
 class Objects extends React.Component {
   render() {
