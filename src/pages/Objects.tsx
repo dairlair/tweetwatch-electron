@@ -15,7 +15,7 @@ class Objects extends Component<ObjectsProps> {
     const {objects} = this.props.objectStore!;
     return (
       <div>
-          <Button onClick={this.clickHandler}>Add object</Button>
+          <Button onClick={this.addObject}>Add object</Button>
           {objects.map((object: ObjectModel, key) =>
               <div key={key}>
                 #{object.id} - {object.title}
@@ -25,7 +25,7 @@ class Objects extends Component<ObjectsProps> {
     );
   }
 
-  private clickHandler = () =>{
+  private addObject = () => {
     const {addObject} = this.props.objectStore!;
     addObject({title: "Object #" + (new Date()).getMilliseconds()})
   }
