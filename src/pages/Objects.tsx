@@ -27,7 +27,7 @@ class Objects extends Component<ObjectsProps> {
 
   private clickHandler = () =>{
     const {addObject} = this.props.objectStore!;
-    addObject({title: "Object" + (new Date()).getMilliseconds()})
+    addObject({title: "Object #" + (new Date()).getMilliseconds()})
   }
 }
 
