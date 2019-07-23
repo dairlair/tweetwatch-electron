@@ -56,36 +56,3 @@ export class ObjectStore implements IObjectStore {
 }
 
 export default ObjectStore;
-
-
-// import { observable, action, reaction, computed } from 'mobx'
-
-// interface Object {
-//   id: number
-//   title: string
-//   isDeleted: boolean
-// }
-
-// export class ObjectStore {
-//   @observable objectList: Object[] = []
-
-//   constructor() {
-//   }
-
-//   @computed
-//   get objectsCount(): number {
-//     return this.objectList.length
-//   }
-
-//   @action
-//   addTodo(id: number, title: string) {
-//     this.objectList.push({ id, title, isDeleted: false })
-//   }
-
-// //   @action
-// //   completeTodo(completedTodo: Todo) {
-// //     this.todoList.find((todo) => todo === completedTodo).isComplete = true
-// //   }
-// }
-
-// export const objectStore = new ObjectStore()
