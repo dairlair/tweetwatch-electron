@@ -1,8 +1,16 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd';
+import { AppStateStore } from '../stores/AppStateStore';
+import { observer, inject } from 'mobx-react';
 
-class Header extends React.Component {
+interface HeaderProps  {
+  appStateStore: AppStateStore
+}
+
+@inject('appStateStore')
+@observer
+class Header extends Component<HeaderProps> {
   state = {
     current: 'dashboard',
   };
@@ -24,6 +32,16 @@ class Header extends React.Component {
           Objects
           <Link to="/objects" />
         </Menu.Item>
+        <Menu.Item key="signup">
+          Sign up
+          <Link to="/signup" />
+        </Menu.Item>
+        {this.props.appStateStore.loggedIn &&
+          <Menu.Item key="logout">
+            Log out
+            <Link to="/logout" />
+          </Menu.Item>
+        }
       </Menu>
     );
   }
