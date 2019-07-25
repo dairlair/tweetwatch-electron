@@ -1,77 +1,48 @@
-class AuthStore  {
+import { observable, action, reaction } from 'mobx';
+
+export interface IAuthStore {
+  loggedIn: boolean
+  login (email: string, password: string): void
+  logout (): void
 }
 
-export default AuthStore;
+class AuthStore implements IAuthStore{
+  @observable loggedIn: boolean = false
+  @observable protected token: string|null = null
 
-// import { observable, action } from 'mobx';
-// import { inject } from 'mobx-react';
-// import { ICommonStore } from './CommonStore';
+  constructor() {
+    this.loadToken()
+    reaction(() => this.token, token => {
+        if (token) {
+          window.localStorage.setItem('token', token);
+        } else {
+          window.localStorage.removeItem('token');
+        }
+    });
+  }
 
-// interface AuthStoreProps {
-//     commonStore?: ICommonStore
-// }
+  @action login(email: string, password: string): void {
+    console.log('Login action called')
+    this.setToken('token')
+  }
 
-// @inject('objectStore')
-// class AuthStore  {
-//   @observable inProgress = false;
-//   @observable errors = undefined;
+  @action logout(): void {
+    this.setToken(null)
+  }
 
-//   constructor(props: Readonly<AuthStoreProps>)
-//   {
-//     console.log('Properties: ', props)
-//   }
+  @action protected setToken(token: string|null) {
+    this.loggedIn = token !== null
+    this.token = token;
+  }
 
-//   @observable values = {
-//     email: '',
-//     password: '',
-//   };
+  protected loadToken(): void {
+    let token: string|null = window.localStorage.getItem('token')
+    if (token) {
+      this.setToken(token)
+    }
+  }
+}
 
-//   @action setEmail(email: string) {
-//     this.values.email = email;
-//   }
+const authStore = new AuthStore();
 
-//   @action setPassword(password: string) {
-//     this.values.password = password;
-//   }
-
-//   @action reset() {
-//     this.values.email = '';
-//     this.values.password = '';
-//   }
-
-//   @action signIn() {
-//     this.inProgress = true;
-//     this.errors = undefined;
-//     console.log('signIn');
-//     // return agent.Auth.login(this.values.email, this.values.password)
-//     //   .then(({ user }) => commonStore.setToken(user.token))
-//     //   .then(() => userStore.pullUser())
-//     //   .catch(action((err) => {
-//     //     this.errors = err.response && err.response.body && err.response.body.errors;
-//     //     throw err;
-//     //   }))
-//     //   .finally(action(() => { this.inProgress = false; }));
-//   }
-
-//   @action signUp() {
-//     this.inProgress = true;
-//     this.errors = undefined;
-//     console.log('signUp');
-//     // return agent.Auth.register(this.values.username, this.values.email, this.values.password)
-//     //   .then(({ user }) => commonStore.setToken(user.token))
-//     //   .then(() => userStore.pullUser())
-//     //   .catch(action((err) => {
-//     //     this.errors = err.response && err.response.body && err.response.body.errors;
-//     //     throw err;
-//     //   }))
-//     //   .finally(action(() => { this.inProgress = false; }));
-//   }
-
-//   @action logout() {
-//     CommonStore.setToken(undefined);
-//     userStore.forgetUser();
-//     return Promise.resolve();
-//   }
-// }
-
-// export default new AuthStore();
+export default authStore;

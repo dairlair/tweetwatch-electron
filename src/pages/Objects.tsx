@@ -4,13 +4,9 @@ import { observer, inject } from 'mobx-react';
 import { IObjectStore } from '../stores/ObjectStore';
 import { ObjectModel } from '../models';
 
-interface ObjectsProps {
-  objectStore?: IObjectStore
-}
-
 @inject('objectStore')
 @observer
-class Objects extends Component<ObjectsProps> {
+class Objects extends Component<{objectStore?: IObjectStore}> {
   render() {
     const {objects} = this.props.objectStore!;
     return (

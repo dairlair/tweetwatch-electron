@@ -1,25 +1,25 @@
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd';
-import { AppStateStore } from '../stores/AppStateStore';
+import { IAuthStore } from '../stores/AuthStore';
 import { observer, inject } from 'mobx-react';
 
-interface HeaderProps  {
-  appStateStore: AppStateStore
-}
-
-@inject('appStateStore')
+@inject('authStore')
 @observer
-class Header extends Component<HeaderProps> {
+class Header extends Component<{authStore?: IAuthStore}> {
   state = {
     current: 'dashboard',
   };
 
-  handleClick = (e: { key: any; }) => {
+  private handleClick = (e: { key: any; }) => {
     this.setState({
       current: e.key,
     });
   };
+
+  private logout = () => {
+    this.props.authStore && this.props.authStore.logout();
+  }
 
   render() {
     return (
@@ -32,12 +32,14 @@ class Header extends Component<HeaderProps> {
           Objects
           <Link to="/objects" />
         </Menu.Item>
+        {this.props.authStore && !this.props.authStore.loggedIn &&
         <Menu.Item key="signup">
           Sign up
           <Link to="/signup" />
         </Menu.Item>
-        {this.props.appStateStore.loggedIn &&
-          <Menu.Item key="logout">
+        }
+        {this.props.authStore && this.props.authStore.loggedIn &&
+          <Menu.Item key="logout" onClick={this.logout}>
             Log out
             <Link to="/logout" />
           </Menu.Item>

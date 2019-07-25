@@ -2,19 +2,19 @@ import React, { Component, FormEvent } from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { observer, inject } from 'mobx-react';
-import { AppStateStore } from '../stores/AppStateStore';
+import { IAuthStore } from '../stores/AuthStore';
 
 interface SignUpFormProps extends FormComponentProps {
-  appStateStore: AppStateStore
+  authStore: IAuthStore
 }
 
-@inject('appStateStore')
+@inject('authStore')
 @observer
 class SignUpForm extends Component<SignUpFormProps, any> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.appStateStore.login(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
+    this.props.authStore.login(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
   }
 
   render() {
