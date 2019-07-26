@@ -12,6 +12,9 @@ node_js: 'v12.6.0'
 
 addons:
   chrome: stable # Install chrome stable on operating systems
+  apt:
+  packages:
+    - xvfb # Required for spectrong tests 
 
 # A list of operating systems which are used for tests
 os:
@@ -40,6 +43,10 @@ install:
   # Install all dependencies listed in your package.json file
   # - yarn
 
+  # Install for spectron
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
 script:
 
   - echo "Build linux version"
@@ -47,6 +54,9 @@ script:
 
   - echo "Build OS X version"
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn build mac; fi
+
+  - echo "Run e2e testing"
+  - yarn test:e2e
 
   # - echo "Deploy linux version to GitHub"
   # - if [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn release:linux; fi
