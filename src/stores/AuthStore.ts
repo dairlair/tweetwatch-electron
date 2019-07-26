@@ -43,6 +43,4 @@ class AuthStore implements IAuthStore{
   }
 }
 
-const authStore = new AuthStore();
-
-export default authStore;
+export default AuthStore;

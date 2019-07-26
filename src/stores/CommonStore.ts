@@ -4,7 +4,7 @@ export interface ICommonStore {
     setToken(token: string): void;
 }
 
-export class CommonStore implements ICommonStore {
+class CommonStore implements ICommonStore {
   @observable token = window.localStorage.getItem('token');
 
   constructor() {
