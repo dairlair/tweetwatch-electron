@@ -18,7 +18,6 @@ class ObjectStore implements IObjectStore {
     return this.objects.filter((object: ObjectModel) => true);
   }
 
-
   @action
   addObject = (object: Partial<ObjectModel>): void => {
     this.objects.push(new ObjectModel(object.title || 'Unknown'));

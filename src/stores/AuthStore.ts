@@ -1,13 +1,13 @@
 import { observable, action, reaction } from 'mobx';
 
 export interface IAuthStore {
-  loggedIn: boolean
+  signedIn: boolean
   login (email: string, password: string): void
   logout (): void
 }
 
 class AuthStore implements IAuthStore{
-  @observable loggedIn: boolean = false
+  @observable signedIn: boolean = false
   @observable protected token: string|null = null
 
   constructor() {
@@ -31,7 +31,7 @@ class AuthStore implements IAuthStore{
   }
 
   @action protected setToken(token: string|null) {
-    this.loggedIn = token !== null
+    this.signedIn = token !== null
     this.token = token;
   }
 

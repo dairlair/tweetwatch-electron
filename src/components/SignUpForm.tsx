@@ -1,4 +1,5 @@
 import React, { Component, FormEvent } from 'react';
+import { Redirect } from 'react-router';
 import { Form, Icon, Input, Button } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { observer, inject } from 'mobx-react';
@@ -18,6 +19,11 @@ class SignUpForm extends Component<SignUpFormProps, any> {
   }
 
   render() {
+
+    if (this.props.authStore.signedIn) {
+      return <Redirect to='/' />
+    }
+
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
