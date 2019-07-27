@@ -5,7 +5,7 @@ const path = require('path')
 
 describe('Application launch', function () {
   this.timeout(10000)
-  beforeEach(function () {
+  beforeEach(function () {``
     this.app = new Application({
       path: electronPath,
       args: [path.join(__dirname, '../build/index.html')]

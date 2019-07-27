@@ -41,7 +41,7 @@ install:
   # On OS X we first need to install Yarn via Homebrew
   # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn; fi
   # Install all dependencies listed in your package.json file
-  # - yarn
+  - yarn
 
   # Install for spectron
   - export DISPLAY=':99.0'
