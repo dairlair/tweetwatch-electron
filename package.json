@@ -2,10 +2,10 @@
   "name": "tweetwatch-electron",
   "version": "0.1.0",
   "private": true,
-  "description": "<your project description>",
-  "author": "<author of app>",
+  "description": "Tweetwatch Platform Client",
+  "author": "dairlair",
   "build": {
-    "appId": "com.google"
+    "appId": "tweetwatch"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -28,6 +28,7 @@
   },
   "scripts": {
     "test": "react-scripts test",
+    "test:e2e": "mocha test/**/*.spec.js",
     "eject": "react-scripts eject",
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
@@ -54,9 +55,12 @@
     ]
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.7",
     "concurrently": "^4.1.1",
     "electron": "^5.0.7",
     "electron-builder": "^21.1.1",
+    "mocha": "^6.2.0",
+    "spectron": "^7.0.0",
     "wait-on": "^3.3.0"
   }
 }
