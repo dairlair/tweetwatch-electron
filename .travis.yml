@@ -56,6 +56,9 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn build mac; fi
 
   - echo "Run e2e testing"
+  - ls -la ./node_modules/bin
+  - ls -la ./node_modules/mocha
+  - ./node_modules/bin/mocha test/**/*.spec.js
   - yarn test:e2e
 
   # - echo "Deploy linux version to GitHub"
