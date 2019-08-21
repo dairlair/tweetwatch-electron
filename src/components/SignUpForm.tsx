@@ -20,7 +20,7 @@ class SignUpForm extends Component<SignUpFormProps, any> {
 
   render() {
 
-    if (this.props.authStore.signedIn) {
+    if (this.props.authStore.isLoggedIn) {
       return <Redirect to='/' />
     }
 
