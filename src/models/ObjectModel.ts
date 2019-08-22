@@ -1,4 +1,3 @@
-
 import { observable } from 'mobx';
 
 export class ObjectModel {
