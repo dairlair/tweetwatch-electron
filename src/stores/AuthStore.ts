@@ -1,16 +1,19 @@
 import { observable, action, reaction } from 'mobx';
+import AuthService from '../services/AuthService'
 
 export interface IAuthStore {
   isLoggedIn: boolean
-  login (email: string, password: string): void
+  signup (email: string, password: string): void
   logout (): void
 }
 
 class AuthStore implements IAuthStore{
   @observable isLoggedIn: boolean = false
   @observable protected token: string|null = null
+  private authService: AuthService
 
   constructor() {
+    this.authService = new AuthService()
     this.loadToken()
     reaction(() => this.token, token => {
         if (token) {
@@ -21,9 +24,9 @@ class AuthStore implements IAuthStore{
     });
   }
 
-  @action login(email: string, password: string): void {
-    console.log('Login action called')
-    this.setToken('token')
+  @action signup(email: string, password: string): void {
+    this.authService.signup(email, password)
+    // this.setToken(this.createToken(email, password));
   }
 
   @action logout(): void {
@@ -40,6 +43,10 @@ class AuthStore implements IAuthStore{
     if (token) {
       this.setToken(token)
     }
+  }
+
+  private createToken(email: string, password: string): string {
+    return btoa(`${email}:${password}`);
   }
 }
 

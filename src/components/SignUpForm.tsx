@@ -15,7 +15,7 @@ class SignUpForm extends Component<SignUpFormProps, any> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.authStore.login(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
+    this.props.authStore.signup(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
   }
 
   render() {
