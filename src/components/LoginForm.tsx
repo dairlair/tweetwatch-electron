@@ -5,17 +5,17 @@ import { FormComponentProps } from 'antd/lib/form';
 import { observer, inject } from 'mobx-react';
 import { IAuthStore } from '../stores/AuthStore';
 
-interface SignupFormProps extends FormComponentProps {
+interface LoginFormProps extends FormComponentProps {
   authStore: IAuthStore
 }
 
 @inject('authStore')
 @observer
-class SignupForm extends Component<SignupFormProps, any> {
+class LoginForm extends Component<LoginFormProps, any> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.authStore.signup(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
+    this.props.authStore.login(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
   }
 
   render() {
@@ -56,7 +56,7 @@ class SignupForm extends Component<SignupFormProps, any> {
             Forgot password
           </a> */}
           <Button type="primary" htmlType="submit" className="login-form-button">
-            Sign up
+            Log in
           </Button>
           {/* Or <a href="">register now!</a> */}
         </Form.Item>
@@ -65,6 +65,6 @@ class SignupForm extends Component<SignupFormProps, any> {
   }
 }
 
-const WrappedSignupForm = Form.create({ name: 'signup' })(SignupForm);
+const WrappedLoginForm = Form.create({ name: 'login' })(LoginForm);
 
-export default WrappedSignupForm;
+export default WrappedLoginForm;

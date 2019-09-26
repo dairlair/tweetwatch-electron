@@ -1,7 +1,9 @@
 import { observable, action, reaction } from 'mobx';
+import AuthService from '../services/AuthService'
 
 export interface IAuthStore {
   isLoggedIn: boolean
+  signup (email: string, password: string): void
   login (email: string, password: string): void
   logout (): void
 }
@@ -9,8 +11,10 @@ export interface IAuthStore {
 class AuthStore implements IAuthStore{
   @observable isLoggedIn: boolean = false
   @observable protected token: string|null = null
+  private authService: AuthService
 
   constructor() {
+    this.authService = new AuthService()
     this.loadToken()
     reaction(() => this.token, token => {
         if (token) {
@@ -21,9 +25,31 @@ class AuthStore implements IAuthStore{
     });
   }
 
+  @action signup(email: string, password: string): void {
+    this.authService.signup(email, password).then((result: boolean) => {
+      if (result) {
+        this.setToken(this.createToken(email, password))
+        console.log('Signup successful')
+      } else {
+        console.log('Invalid credentials')
+      }
+    }).catch(() => {
+      console.log('Something went wrong')
+    })
+  }
+
   @action login(email: string, password: string): void {
-    console.log('Login action called')
-    this.setToken('token')
+    const token: string = this.createToken(email, password)
+    this.authService.login(token).then((result: boolean) => {
+      if (result) {
+        this.setToken(token)
+        console.log('Signup successful')
+      } else {
+        console.log('Invalid credentials')
+      }
+    }).catch(() => {
+      console.log('Something went wrong')
+    })
   }
 
   @action logout(): void {
@@ -40,6 +66,10 @@ class AuthStore implements IAuthStore{
     if (token) {
       this.setToken(token)
     }
+  }
+
+  private createToken(email: string, password: string): string {
+    return btoa(`${email}:${password}`);
   }
 }
 
