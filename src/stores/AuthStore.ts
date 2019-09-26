@@ -4,6 +4,7 @@ import AuthService from '../services/AuthService'
 export interface IAuthStore {
   isLoggedIn: boolean
   signup (email: string, password: string): void
+  login (email: string, password: string): void
   logout (): void
 }
 
@@ -25,8 +26,30 @@ class AuthStore implements IAuthStore{
   }
 
   @action signup(email: string, password: string): void {
-    this.authService.signup(email, password)
-    // this.setToken(this.createToken(email, password));
+    this.authService.signup(email, password).then((result: boolean) => {
+      if (result) {
+        this.setToken(this.createToken(email, password))
+        console.log('Signup successful')
+      } else {
+        console.log('Invalid credentials')
+      }
+    }).catch(() => {
+      console.log('Something went wrong')
+    })
+  }
+
+  @action login(email: string, password: string): void {
+    const token: string = this.createToken(email, password)
+    this.authService.login(token).then((result: boolean) => {
+      if (result) {
+        this.setToken(token)
+        console.log('Signup successful')
+      } else {
+        console.log('Invalid credentials')
+      }
+    }).catch(() => {
+      console.log('Something went wrong')
+    })
   }
 
   @action logout(): void {
