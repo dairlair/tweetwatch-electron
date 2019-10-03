@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios'
-import { strict } from 'assert';
 
 const webApiUrl = "/api";
 
