@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
+import { strict } from 'assert';
 
 const webApiUrl = "/api";
 
@@ -12,40 +13,33 @@ class AuthService {
         });
     }
 
-    public async signup(email: string, password: string): Promise<boolean>
+    public async signup(email: string, password: string): Promise<boolean|string>
     {
-        return this.httpClient.post('/signup', {email: email, password: password})
-        .then((response) => {
-            console.info("signup success", response)
-            return this.isValidSignupResponse(response.data)
-        }).catch((err) => {
-            console.error("signup error:", err)
-            return false
-        })
+        return this.auth('/signup', email, password);
     }
 
-    public async login(token: string): Promise<boolean>
+    public async login(email: string, password: string): Promise<boolean|string>
     {
-        return this.httpClient.post('/login', {}, {
-            headers: {
-                "Authorization": "Basic " + token  
-            }
-        })
+        return this.auth('/login', email, password);
+    }
+
+    private async auth(path: string, email: string, password: string): Promise<boolean|string> {
+        return this.httpClient.post(path, {email: email, password: password})
         .then((response) => {
             console.log(response.data)
-            return this.isValidSignupResponse(response.data)
+            return this.isValidAuthResponse(response.data)
         }).catch((err) => {
-            console.error("login error:", err)
+            console.error("auth error:", err)
             return false
         })
     }
 
-    private isValidSignupResponse(response: any): boolean  {
-        return ("id" in response) && (response.id > 1)
-    }
+    private isValidAuthResponse(response: any): boolean|string  {
+        if ("token" in response) {
+            return response.token
+        }
 
-    private isValidLoginResponse(response: any): boolean  {
-        return ("id" in response) && (response.id > 1)
+        return false
     }
 }
 

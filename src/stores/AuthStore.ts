@@ -26,9 +26,10 @@ class AuthStore implements IAuthStore{
   }
 
   @action signup(email: string, password: string): void {
-    this.authService.signup(email, password).then((result: boolean) => {
-      if (result) {
-        this.setToken(this.createToken(email, password))
+    // @TODO Replace boolean|string to AuthResponse type.
+    this.authService.signup(email, password).then((result: boolean|string) => {
+      if (typeof result == 'string') {
+        this.setToken(result)
         console.log('Signup successful')
       } else {
         console.log('Invalid credentials')
@@ -39,11 +40,10 @@ class AuthStore implements IAuthStore{
   }
 
   @action login(email: string, password: string): void {
-    const token: string = this.createToken(email, password)
-    this.authService.login(token).then((result: boolean) => {
-      if (result) {
-        this.setToken(token)
-        console.log('Signup successful')
+    this.authService.login(email, password).then((result: boolean|string) => {
+      if (typeof result == 'string') {
+        this.setToken(result)
+        console.log('Login successful')
       } else {
         console.log('Invalid credentials')
       }
@@ -66,10 +66,6 @@ class AuthStore implements IAuthStore{
     if (token) {
       this.setToken(token)
     }
-  }
-
-  private createToken(email: string, password: string): string {
-    return btoa(`${email}:${password}`);
   }
 }
 
