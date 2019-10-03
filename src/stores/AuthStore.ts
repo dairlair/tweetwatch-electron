@@ -3,6 +3,7 @@ import AuthService from '../services/AuthService'
 
 export interface IAuthStore {
   isLoggedIn: boolean
+  token: string|null
   signup (email: string, password: string): void
   login (email: string, password: string): void
   logout (): void
@@ -10,7 +11,7 @@ export interface IAuthStore {
 
 class AuthStore implements IAuthStore{
   @observable isLoggedIn: boolean = false
-  @observable protected token: string|null = null
+  @observable public token: string|null = null
   private authService: AuthService
 
   constructor() {

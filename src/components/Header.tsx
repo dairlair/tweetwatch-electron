@@ -32,6 +32,12 @@ class Header extends Component<{authStore?: IAuthStore}> {
           Objects
           <Link to="/objects" />
         </Menu.Item>
+        {this.props.authStore && this.props.authStore.isLoggedIn &&
+          <Menu.Item key="topics">
+            Topics
+            <Link to="/topics" />
+          </Menu.Item>
+        }
         {this.props.authStore && !this.props.authStore.isLoggedIn &&
         <Menu.Item key="signup">
           Sign up
