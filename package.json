@@ -39,7 +39,7 @@
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
     "start": "concurrently \"cross-env B  ROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
-    "client": "npx openapi-generator generate -i tweetwatch-server.yml -g typescript-axios -o ./src/api-client"
+    "client": "npx openapi-generator generate -i tweetwatch-server.yml -g typescript-fetch -o ./src/api-client"
   },
   "eslintConfig": {
     "extends": "react-app"

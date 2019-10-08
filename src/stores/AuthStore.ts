@@ -1,7 +1,6 @@
 import { observable, action, reaction } from 'mobx'
 import AuthService from '../services/AuthService'
-import { DefaultApi, UserResponse, Configuration } from '../api-client'
-import { AxiosResponse } from 'axios'
+import { DefaultApi, Configuration, User } from '../api-client/src'
 
 export interface IAuthStore {
   isLoggedIn: boolean
@@ -31,10 +30,9 @@ class AuthStore implements IAuthStore{
   }
 
   @action signup(email: string, password: string): void {
-      this.apiClient.signup({email: email, password: password}).then((response: AxiosResponse<UserResponse>) => {
-        const data = response.data
-        if (data.token) {
-          this.setToken(data.token)
+      this.apiClient.signup({user: {email: email, password: password}}).then((response: User) => {
+        if (response.token) {
+          this.setToken(response.token)
           console.log('Signup successful')
         } else {
           console.log('Invalid credentials')
