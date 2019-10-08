@@ -1,5 +1,7 @@
-import { observable, action, reaction } from 'mobx';
+import { observable, action, reaction } from 'mobx'
 import AuthService from '../services/AuthService'
+import { DefaultApi, UserResponse, Configuration } from '../api-client'
+import { AxiosResponse } from 'axios'
 
 export interface IAuthStore {
   isLoggedIn: boolean
@@ -13,10 +15,12 @@ class AuthStore implements IAuthStore{
   @observable isLoggedIn: boolean = false
   @observable public token: string|null = null
   private authService: AuthService
+  private apiClient: DefaultApi
 
   constructor() {
     this.authService = new AuthService()
     this.loadToken()
+    this.apiClient = new DefaultApi(new Configuration({basePath: "http://localhost:1308"}))
     reaction(() => this.token, token => {
         if (token) {
           window.localStorage.setItem('token', token);
@@ -27,17 +31,17 @@ class AuthStore implements IAuthStore{
   }
 
   @action signup(email: string, password: string): void {
-    // @TODO Replace boolean|string to AuthResponse type.
-    this.authService.signup(email, password).then((result: boolean|string) => {
-      if (typeof result == 'string') {
-        this.setToken(result)
-        console.log('Signup successful')
-      } else {
-        console.log('Invalid credentials')
-      }
-    }).catch(() => {
-      console.log('Something went wrong')
-    })
+      this.apiClient.signup({email: email, password: password}).then((response: AxiosResponse<UserResponse>) => {
+        const data = response.data
+        if (data.token) {
+          this.setToken(data.token)
+          console.log('Signup successful')
+        } else {
+          console.log('Invalid credentials')
+        }
+      }, error => {
+        console.error('Something went wrong', error)
+      })
   }
 
   @action login(email: string, password: string): void {
