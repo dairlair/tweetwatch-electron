@@ -16,7 +16,7 @@ class Topics extends Component<{topicStore: ITopicStore}> {
     const {topics} = this.props.topicStore!;
     return (
       <div>
-          <Link to="/topics-create">Add topic</Link>
+          <Link to="/topics/create">Create topic</Link>
           {topics.map((topic: TopicModel, key) =>
               <div key={key}>
                 #{topic.id} - {topic.name}

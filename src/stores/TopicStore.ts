@@ -1,12 +1,12 @@
 import { observable, action } from 'mobx';
-import { DefaultApi, Configuration, Topic } from '../api-client/src'
+import { DefaultApi, Configuration, Topic, CreateTopicRequest } from '../api-client/src'
 import { TopicModel } from '../models';
 import { IAuthStore } from './AuthStore'
 import appConfig from '../config'
 
 export interface ITopicStore {
   topics: Array<TopicModel>;
-  addTopic(object: Partial<TopicModel>): void;
+  createTopic(topic: CreateTopicRequest): void;
   retrieveTopics(): void;
 }
 
@@ -28,8 +28,12 @@ class TopicStore implements ITopicStore {
         }))
     }
 
-    @action addTopic = (object: Partial<TopicModel>): void => {
-        // this.objects.push(new ObjectModel(object.title || 'Unknown'));
+    @action createTopic = (request: CreateTopicRequest): void => {
+        this.apiClient.createTopic(request).then(() => {
+
+        }).catch(() => {
+
+        })
     }
 
     @action async retrieveTopics() {

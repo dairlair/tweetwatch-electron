@@ -1,64 +1,44 @@
-import { Button, Form, Icon, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import React, { Component, FormEvent } from 'react';
 import { Redirect } from 'react-router';
-import { IAuthStore } from '../stores/AuthStore';
+import { ITopicStore } from '../stores/TopicStore';
 
-interface SignupFormProps extends FormComponentProps {
-  authStore: IAuthStore
+interface CreateTopicFormProps extends FormComponentProps {
+  topicStore: ITopicStore
 }
 
-@inject('authStore')
+@inject('topicStore')
 @observer
-class CreateTopicForm extends Component<SignupFormProps, any> {
+class CreateTopicForm extends Component<CreateTopicFormProps, any> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.authStore.signup(this.props.form.getFieldValue('email'), this.props.form.getFieldValue('password'))
+    const name = this.props.form.getFieldValue('name')
+    const tracks = this.props.form.getFieldValue('tracks')
+    const isActive = this.props.form.getFieldValue('isActive')
+    this.props.topicStore.createTopic({topic:{name: name, tracks: tracks, isActive: isActive}})
   }
 
   render() {
-
-    if (this.props.authStore.isLoggedIn) {
-      return <Redirect to='/' />
-    }
-
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <Form onSubmit={this.handleSubmit} className="create-topic-form">
         <Form.Item>
-          {getFieldDecorator('email', {
-            rules: [
-              { required: true, message: 'Please input your e-mail!' }, 
-              { type: 'email', message: 'The input is not valid E-mail!'},
-            ],
-          })(
-            <Input
-              prefix={<Icon type="email" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="E-mail"
-            />,
+          {getFieldDecorator('name', {})(
+            <Input placeholder="Name" />,
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
-          })(
-            <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              type="password"
-              placeholder="Password"
-            />,
+          {getFieldDecorator('tracks', {})(
+            <Input placeholder="Keywords"/>,
           )}
         </Form.Item>
         <Form.Item>
-          {/* <a className="login-form-forgot" href="">
-            Forgot password
-          </a> */}
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Sign up
+          <Button type="primary" htmlType="submit" className="create-topic-form-button">
+            Create
           </Button>
-          {/* Or <a href="">register now!</a> */}
         </Form.Item>
       </Form>
     );
