@@ -14,16 +14,26 @@
 
 import * as runtime from '../runtime';
 import {
+    CreateTopic,
+    CreateTopicFromJSON,
+    CreateTopicToJSON,
     Credentials,
     CredentialsFromJSON,
     CredentialsToJSON,
     DefaultError,
     DefaultErrorFromJSON,
     DefaultErrorToJSON,
+    Topic,
+    TopicFromJSON,
+    TopicToJSON,
     User,
     UserFromJSON,
     UserToJSON,
 } from '../models';
+
+export interface CreateTopicRequest {
+    topic: CreateTopic;
+}
 
 export interface LoginRequest {
     user: Credentials;
@@ -33,10 +43,78 @@ export interface SignupRequest {
     user: Credentials;
 }
 
+export interface UpdateTopicRequest {
+    topicId: number;
+    topic: CreateTopic;
+}
+
 /**
  * no description
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async createTopicRaw(requestParameters: CreateTopicRequest): Promise<runtime.ApiResponse<Topic>> {
+        if (requestParameters.topic === null || requestParameters.topic === undefined) {
+            throw new runtime.RequiredError('topic','Required parameter requestParameters.topic was null or undefined when calling createTopic.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/topics`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTopicToJSON(requestParameters.topic),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async createTopic(requestParameters: CreateTopicRequest): Promise<Topic> {
+        const response = await this.createTopicRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getUserTopicsRaw(): Promise<runtime.ApiResponse<Array<Topic>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/topics`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TopicFromJSON));
+    }
+
+    /**
+     */
+    async getUserTopics(): Promise<Array<Topic>> {
+        const response = await this.getUserTopicsRaw();
+        return await response.value();
+    }
 
     /**
      */
@@ -105,6 +183,47 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async signup(requestParameters: SignupRequest): Promise<User> {
         const response = await this.signupRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Update desired topic by Topic ID
+     */
+    async updateTopicRaw(requestParameters: UpdateTopicRequest): Promise<runtime.ApiResponse<Topic>> {
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling updateTopic.');
+        }
+
+        if (requestParameters.topic === null || requestParameters.topic === undefined) {
+            throw new runtime.RequiredError('topic','Required parameter requestParameters.topic was null or undefined when calling updateTopic.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/topics/{topicId}`.replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTopicToJSON(requestParameters.topic),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TopicFromJSON(jsonValue));
+    }
+
+    /**
+     * Update desired topic by Topic ID
+     */
+    async updateTopic(requestParameters: UpdateTopicRequest): Promise<Topic> {
+        const response = await this.updateTopicRaw(requestParameters);
         return await response.value();
     }
 

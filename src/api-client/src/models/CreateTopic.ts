@@ -15,39 +15,46 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Credentials
+ * @interface CreateTopic
  */
-export interface Credentials {
+export interface CreateTopic {
     /**
      * 
      * @type {string}
-     * @memberof Credentials
+     * @memberof CreateTopic
      */
-    email: string;
+    name: string;
     /**
      * 
-     * @type {string}
-     * @memberof Credentials
+     * @type {Array<string>}
+     * @memberof CreateTopic
      */
-    password: string;
+    tracks: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateTopic
+     */
+    isActive: boolean;
 }
 
-export function CredentialsFromJSON(json: any): Credentials {
-    return CredentialsFromJSONTyped(json, false);
+export function CreateTopicFromJSON(json: any): CreateTopic {
+    return CreateTopicFromJSONTyped(json, false);
 }
 
-export function CredentialsFromJSONTyped(json: any, ignoreDiscriminator: boolean): Credentials {
+export function CreateTopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateTopic {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'email': json['email'],
-        'password': json['password'],
+        'name': json['name'],
+        'tracks': json['tracks'],
+        'isActive': json['isActive'],
     };
 }
 
-export function CredentialsToJSON(value?: Credentials | null): any {
+export function CreateTopicToJSON(value?: CreateTopic | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -56,8 +63,9 @@ export function CredentialsToJSON(value?: Credentials | null): any {
     }
     return {
         
-        'email': value.email,
-        'password': value.password,
+        'name': value.name,
+        'tracks': value.tracks,
+        'isActive': value.isActive,
     };
 }
 

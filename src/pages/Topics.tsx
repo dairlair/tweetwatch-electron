@@ -9,7 +9,7 @@ import { TopicModel } from '../models';
 class Topics extends Component<{topicStore: ITopicStore}> {
 
   componentDidMount() {
-    this.props.topicStore.getTopicsAsync();
+    this.props.topicStore.retrieveTopics();
   }
 
   render() {

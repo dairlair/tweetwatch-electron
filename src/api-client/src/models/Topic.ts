@@ -15,46 +15,60 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface User
+ * @interface Topic
  */
-export interface User {
+export interface Topic {
     /**
      * 
      * @type {number}
-     * @memberof User
+     * @memberof Topic
      */
     id: number;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof Topic
      */
-    email: string;
+    name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Topic
+     */
+    tracks: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof Topic
      */
-    token: string;
+    createdAt: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Topic
+     */
+    isActive: boolean;
 }
 
-export function UserFromJSON(json: any): User {
-    return UserFromJSONTyped(json, false);
+export function TopicFromJSON(json: any): Topic {
+    return TopicFromJSONTyped(json, false);
 }
 
-export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
+export function TopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): Topic {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'email': json['email'],
-        'token': json['token'],
+        'name': json['name'],
+        'tracks': json['tracks'],
+        'createdAt': json['createdAt'],
+        'isActive': json['isActive'],
     };
 }
 
-export function UserToJSON(value?: User | null): any {
+export function TopicToJSON(value?: Topic | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -64,8 +78,10 @@ export function UserToJSON(value?: User | null): any {
     return {
         
         'id': value.id,
-        'email': value.email,
-        'token': value.token,
+        'name': value.name,
+        'tracks': value.tracks,
+        'createdAt': value.createdAt,
+        'isActive': value.isActive,
     };
 }
 
