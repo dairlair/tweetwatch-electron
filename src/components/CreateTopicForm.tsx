@@ -15,9 +15,10 @@ class CreateTopicForm extends Component<CreateTopicFormProps, any> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const name = this.props.form.getFieldValue('name')
-    const tracks = this.props.form.getFieldValue('tracks')
-    const isActive = this.props.form.getFieldValue('isActive')
+    const tracksString: string = this.props.form.getFieldValue('tracks')
+    const name: string = this.props.form.getFieldValue('name')
+    const tracks: Array<string> = tracksString.split(',')
+    const isActive: boolean = this.props.form.getFieldValue('isActive') ? true : false
     this.props.topicStore.createTopic({topic:{name: name, tracks: tracks, isActive: isActive}})
   }
 
@@ -33,6 +34,11 @@ class CreateTopicForm extends Component<CreateTopicFormProps, any> {
         <Form.Item>
           {getFieldDecorator('tracks', {})(
             <Input placeholder="Keywords"/>,
+          )}
+        </Form.Item>
+        <Form.Item>
+          {getFieldDecorator('isActive', {})(
+            <Input type="checkbox" placeholder="isActive" />,
           )}
         </Form.Item>
         <Form.Item>

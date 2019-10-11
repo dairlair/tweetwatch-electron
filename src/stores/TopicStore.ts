@@ -22,17 +22,16 @@ class TopicStore implements ITopicStore {
         this.topics = fixtures
         this.apiClient = new DefaultApi(new Configuration({
             basePath: appConfig.endpoint(),
-            headers: {
-                Authorization: String(authStore.token)
-            }
+            apiKey: String(authStore.token)
         }))
     }
 
     @action createTopic = (request: CreateTopicRequest): void => {
+        console.log('CreateTopicRequest', request)
         this.apiClient.createTopic(request).then(() => {
-
+            console.log('Topic created successfully') 
         }).catch(() => {
-
+            console.error('Topic creation failed') 
         })
     }
 
