@@ -32,12 +32,6 @@ export interface Topic {
     name: string;
     /**
      * 
-     * @type {Array<string>}
-     * @memberof Topic
-     */
-    tracks: Array<string>;
-    /**
-     * 
      * @type {string}
      * @memberof Topic
      */
@@ -62,7 +56,6 @@ export function TopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): Top
         
         'id': json['id'],
         'name': json['name'],
-        'tracks': json['tracks'],
         'createdAt': json['createdAt'],
         'isActive': json['isActive'],
     };
@@ -79,7 +72,6 @@ export function TopicToJSON(value?: Topic | null): any {
         
         'id': value.id,
         'name': value.name,
-        'tracks': value.tracks,
         'createdAt': value.createdAt,
         'isActive': value.isActive,
     };

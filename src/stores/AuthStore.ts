@@ -50,6 +50,8 @@ class AuthStore implements IAuthStore {
 
   private loadToken(): void {
     let token: string|null = window.localStorage.getItem('token')
+    // this.apiClient.get
+    // @TODO Add token validation
     if (token) {
       this.setToken(token)
     }

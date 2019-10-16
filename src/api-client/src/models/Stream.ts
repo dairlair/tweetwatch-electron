@@ -15,39 +15,46 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CreateTopic
+ * @interface Stream
  */
-export interface CreateTopic {
+export interface Stream {
+    /**
+     * 
+     * @type {number}
+     * @memberof Stream
+     */
+    id: number;
     /**
      * 
      * @type {string}
-     * @memberof CreateTopic
+     * @memberof Stream
      */
-    name: string;
+    track: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof CreateTopic
+     * @type {string}
+     * @memberof Stream
      */
-    isActive: boolean;
+    createdAt: string;
 }
 
-export function CreateTopicFromJSON(json: any): CreateTopic {
-    return CreateTopicFromJSONTyped(json, false);
+export function StreamFromJSON(json: any): Stream {
+    return StreamFromJSONTyped(json, false);
 }
 
-export function CreateTopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateTopic {
+export function StreamFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stream {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
-        'isActive': json['isActive'],
+        'id': json['id'],
+        'track': json['track'],
+        'createdAt': json['createdAt'],
     };
 }
 
-export function CreateTopicToJSON(value?: CreateTopic | null): any {
+export function StreamToJSON(value?: Stream | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -56,8 +63,9 @@ export function CreateTopicToJSON(value?: CreateTopic | null): any {
     }
     return {
         
-        'name': value.name,
-        'isActive': value.isActive,
+        'id': value.id,
+        'track': value.track,
+        'createdAt': value.createdAt,
     };
 }
 

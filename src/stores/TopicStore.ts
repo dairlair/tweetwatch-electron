@@ -6,7 +6,7 @@ import appConfig from '../config'
 
 export interface ITopicStore {
   topics: Array<TopicModel>;
-  createTopic(topic: CreateTopicRequest): void;
+  createTopic(topic: CreateTopicRequest): Promise<Topic>;
   retrieveTopics(): void;
 }
 
@@ -26,13 +26,8 @@ class TopicStore implements ITopicStore {
         }))
     }
 
-    @action createTopic = (request: CreateTopicRequest): void => {
-        console.log('CreateTopicRequest', request)
-        this.apiClient.createTopic(request).then(() => {
-            console.log('Topic created successfully') 
-        }).catch(() => {
-            console.error('Topic creation failed') 
-        })
+    @action createTopic = (request: CreateTopicRequest): Promise<Topic> => {
+        return this.apiClient.createTopic(request)
     }
 
     @action async retrieveTopics() {

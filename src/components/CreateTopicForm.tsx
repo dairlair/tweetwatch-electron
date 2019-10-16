@@ -2,8 +2,8 @@ import { Button, Form, Input } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import React, { Component, FormEvent } from 'react';
-import { Redirect } from 'react-router';
 import { ITopicStore } from '../stores/TopicStore';
+import { Topic } from '../api-client/src';
 
 interface CreateTopicFormProps extends FormComponentProps {
   topicStore: ITopicStore
@@ -11,19 +11,21 @@ interface CreateTopicFormProps extends FormComponentProps {
 
 @inject('topicStore')
 @observer
-class CreateTopicForm extends Component<CreateTopicFormProps, any> {
+class CreateTopicForm extends Component<CreateTopicFormProps> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const tracksString: string = this.props.form.getFieldValue('tracks')
     const name: string = this.props.form.getFieldValue('name')
-    const tracks: Array<string> = tracksString.split(',')
     const isActive: boolean = this.props.form.getFieldValue('isActive') ? true : false
-    this.props.topicStore.createTopic({topic:{name: name, tracks: tracks, isActive: isActive}})
+    this.props.topicStore.createTopic({topic:{name: name, isActive: isActive}}).then((topic: Topic) => {
+      console.log('Topic created succesfully', topic)
+    }).catch(e => {
+      console.error('Topic creation error', e)
+    })
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSubmit} className="create-topic-form">
         <Form.Item>
@@ -32,13 +34,8 @@ class CreateTopicForm extends Component<CreateTopicFormProps, any> {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('tracks', {})(
-            <Input placeholder="Keywords"/>,
-          )}
-        </Form.Item>
-        <Form.Item>
           {getFieldDecorator('isActive', {})(
-            <Input type="checkbox" placeholder="isActive" />,
+            <Input type="checkbox" placeholder="isActive"/>,
           )}
         </Form.Item>
         <Form.Item>

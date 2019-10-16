@@ -15,39 +15,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CreateTopic
+ * @interface CreateStream
  */
-export interface CreateTopic {
+export interface CreateStream {
     /**
      * 
      * @type {string}
-     * @memberof CreateTopic
+     * @memberof CreateStream
      */
-    name: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof CreateTopic
-     */
-    isActive: boolean;
+    track: string;
 }
 
-export function CreateTopicFromJSON(json: any): CreateTopic {
-    return CreateTopicFromJSONTyped(json, false);
+export function CreateStreamFromJSON(json: any): CreateStream {
+    return CreateStreamFromJSONTyped(json, false);
 }
 
-export function CreateTopicFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateTopic {
+export function CreateStreamFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateStream {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
-        'isActive': json['isActive'],
+        'track': json['track'],
     };
 }
 
-export function CreateTopicToJSON(value?: CreateTopic | null): any {
+export function CreateStreamToJSON(value?: CreateStream | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -56,8 +49,7 @@ export function CreateTopicToJSON(value?: CreateTopic | null): any {
     }
     return {
         
-        'name': value.name,
-        'isActive': value.isActive,
+        'track': value.track,
     };
 }
 
