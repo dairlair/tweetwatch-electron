@@ -3,9 +3,10 @@ import { FormComponentProps } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import React, { Component, FormEvent } from 'react';
 import { ITopicStore } from '../stores/TopicStore';
+import { RouteComponentProps, withRouter  } from "react-router-dom";
 import { Topic } from '../api-client/src';
 
-interface CreateTopicFormProps extends FormComponentProps {
+interface CreateTopicFormProps extends FormComponentProps, RouteComponentProps  {
   topicStore: ITopicStore
 }
 
@@ -14,18 +15,19 @@ interface CreateTopicFormProps extends FormComponentProps {
 class CreateTopicForm extends Component<CreateTopicFormProps> {
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     const name: string = this.props.form.getFieldValue('name')
     const isActive: boolean = this.props.form.getFieldValue('isActive') ? true : false
     this.props.topicStore.createTopic({topic:{name: name, isActive: isActive}}).then((topic: Topic) => {
-      console.log('Topic created succesfully', topic)
+      console.log('Topic created succesfully')
+      this.props.history.replace('/topics')
     }).catch(e => {
       console.error('Topic creation error', e)
     })
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form
+    const { getFieldDecorator } = this.props.form   
     return (
       <Form onSubmit={this.handleSubmit} className="create-topic-form">
         <Form.Item>
@@ -48,6 +50,6 @@ class CreateTopicForm extends Component<CreateTopicFormProps> {
   }
 }
 
-const WrappedCreateTopicForm = Form.create({ name: 'createTopic' })(CreateTopicForm);
+const WrappedCreateTopicForm = Form.create({ name: 'createTopic' })(withRouter(CreateTopicForm));
 
 export default WrappedCreateTopicForm;
