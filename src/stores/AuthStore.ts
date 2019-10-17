@@ -1,21 +1,25 @@
-import { observable, action, reaction } from 'mobx';
-import AuthService from '../services/AuthService'
+import { observable, action, reaction } from 'mobx'
+import { DefaultApi, Configuration, User } from '../api-client/src'
+import appConfig from '../config'
 
 export interface IAuthStore {
   isLoggedIn: boolean
+  token: string|null
   signup (email: string, password: string): void
   login (email: string, password: string): void
   logout (): void
 }
 
-class AuthStore implements IAuthStore{
-  @observable isLoggedIn: boolean = false
-  @observable protected token: string|null = null
-  private authService: AuthService
+class AuthStore implements IAuthStore {
+
+  @observable public isLoggedIn: boolean = false
+  @observable public token: string|null = null
+
+  private apiClient: DefaultApi
 
   constructor() {
-    this.authService = new AuthService()
     this.loadToken()
+    this.apiClient = new DefaultApi(new Configuration({basePath: appConfig.endpoint()}))
     reaction(() => this.token, token => {
         if (token) {
           window.localStorage.setItem('token', token);
@@ -25,34 +29,17 @@ class AuthStore implements IAuthStore{
     });
   }
 
-  @action signup(email: string, password: string): void {
-    this.authService.signup(email, password).then((result: boolean) => {
-      if (result) {
-        this.setToken(this.createToken(email, password))
-        console.log('Signup successful')
-      } else {
-        console.log('Invalid credentials')
-      }
-    }).catch(() => {
-      console.log('Something went wrong')
-    })
+  @action public signup(email: string, password: string): void {
+    const promise = this.apiClient.signup({user: {email: email, password: password}})
+    this.processUserResponse(promise)
   }
 
-  @action login(email: string, password: string): void {
-    const token: string = this.createToken(email, password)
-    this.authService.login(token).then((result: boolean) => {
-      if (result) {
-        this.setToken(token)
-        console.log('Signup successful')
-      } else {
-        console.log('Invalid credentials')
-      }
-    }).catch(() => {
-      console.log('Something went wrong')
-    })
+  @action public login(email: string, password: string): void {
+    const promise = this.apiClient.login({user: {email: email, password: password}})
+    this.processUserResponse(promise)
   }
 
-  @action logout(): void {
+  @action public logout(): void {
     this.setToken(null)
   }
 
@@ -61,15 +48,26 @@ class AuthStore implements IAuthStore{
     this.token = token;
   }
 
-  protected loadToken(): void {
+  private loadToken(): void {
     let token: string|null = window.localStorage.getItem('token')
+    // this.apiClient.get
+    // @TODO Add token validation
     if (token) {
       this.setToken(token)
     }
   }
 
-  private createToken(email: string, password: string): string {
-    return btoa(`${email}:${password}`);
+  private processUserResponse(promise: Promise<User>): void {
+    promise.then((response: User) => {
+      if (response.token) {
+        this.setToken(response.token)
+        console.log('Auth successful')
+      } else {
+        console.error('Invalid credentials')
+      }
+    }, error => {
+      console.error('Something went wrong', error)
+    })
   }
 }
 
