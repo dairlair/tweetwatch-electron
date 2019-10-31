@@ -15,39 +15,21 @@
 import * as runtime from '../runtime';
 import {
     CreateStream,
-// eslint-disable-next-line
-    CreateStreamFromJSON,
     CreateStreamToJSON,
     CreateTopic,
-// eslint-disable-next-line
-    CreateTopicFromJSON,
     CreateTopicToJSON,
     Credentials,
-// eslint-disable-next-line
-    CredentialsFromJSON,
     CredentialsToJSON,
-// eslint-disable-next-line
-    DefaultError,
-// eslint-disable-next-line
-    DefaultErrorFromJSON,
-// eslint-disable-next-line
-    DefaultErrorToJSON,
     DefaultSuccess,
     DefaultSuccessFromJSON,
-// eslint-disable-next-line
-    DefaultSuccessToJSON,
     Stream,
     StreamFromJSON,
-// eslint-disable-next-line
-    StreamToJSON,
     Topic,
     TopicFromJSON,
-// eslint-disable-next-line
-    TopicToJSON,
+    Tweet,
+    TweetFromJSON,
     User,
     UserFromJSON,
-// eslint-disable-next-line
-    UserToJSON,
 } from '../models';
 
 export interface CreateStreamRequest {
@@ -64,7 +46,15 @@ export interface DeleteStreamRequest {
     streamId: number;
 }
 
+export interface DeleteTopicRequest {
+    topicId: number;
+}
+
 export interface GetStreamsRequest {
+    topicId: number;
+}
+
+export interface GetTopicTweetsRequest {
     topicId: number;
 }
 
@@ -205,6 +195,68 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Delete desired topic by Topic ID
+     */
+    async deleteTopicRaw(requestParameters: DeleteTopicRequest): Promise<runtime.ApiResponse<DefaultSuccess>> {
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling deleteTopic.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/topics/{topicId}`.replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DefaultSuccessFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete desired topic by Topic ID
+     */
+    async deleteTopic(requestParameters: DeleteTopicRequest): Promise<DefaultSuccess> {
+        const response = await this.deleteTopicRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getStatusRaw(): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/status`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getStatus(): Promise<User> {
+        const response = await this.getStatusRaw();
+        return await response.value();
+    }
+
+    /**
      * Returns list of streams inside the topic
      */
     async getStreamsRaw(requestParameters: GetStreamsRequest): Promise<runtime.ApiResponse<Array<Stream>>> {
@@ -235,6 +287,40 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getStreams(requestParameters: GetStreamsRequest): Promise<Array<Stream>> {
         const response = await this.getStreamsRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Returns list of tweets retrieved for this topic
+     */
+    async getTopicTweetsRaw(requestParameters: GetTopicTweetsRequest): Promise<runtime.ApiResponse<Array<Tweet>>> {
+        if (requestParameters.topicId === null || requestParameters.topicId === undefined) {
+            throw new runtime.RequiredError('topicId','Required parameter requestParameters.topicId was null or undefined when calling getTopicTweets.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
+        }
+
+        const response = await this.request({
+            path: `/topics/{topicId}/tweets`.replace(`{${"topicId"}}`, encodeURIComponent(String(requestParameters.topicId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TweetFromJSON));
+    }
+
+    /**
+     * Returns list of tweets retrieved for this topic
+     */
+    async getTopicTweets(requestParameters: GetTopicTweetsRequest): Promise<Array<Tweet>> {
+        const response = await this.getTopicTweetsRaw(requestParameters);
         return await response.value();
     }
 

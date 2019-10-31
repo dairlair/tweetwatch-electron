@@ -1,47 +1,56 @@
 import { observable, action } from 'mobx';
-import { DefaultApi, Configuration, Topic, CreateTopicRequest } from '../api-client/src'
-import { TopicModel } from '../models';
+import { DefaultApi, Configuration, Topic, CreateTopicRequest, UpdateTopicRequest } from '../api-client/src'
 import { IAuthStore } from './AuthStore'
 import appConfig from '../config'
 
 export interface ITopicStore {
-  topics: Array<TopicModel>;
-  createTopic(topic: CreateTopicRequest): Promise<Topic>;
-  retrieveTopics(): void;
+  topics: Array<Topic>
+  createTopic(request: CreateTopicRequest): Promise<void>
+  updateTopic(request: UpdateTopicRequest): Promise<void>
+  deleteTopic(topicId: number): Promise<void>
+  retrieveTopics(): Promise<void>
 }
 
 class TopicStore implements ITopicStore {
     
-    @observable public topics: Array<TopicModel>
+    @observable public topics: Array<Topic>
 
     private authStore: IAuthStore
-    private apiClient: DefaultApi
 
-    constructor(authStore: IAuthStore, fixtures: TopicModel[]) {
+    constructor(authStore: IAuthStore, fixtures: Topic[]) {
         this.authStore = authStore
         this.topics = fixtures
-        this.apiClient = new DefaultApi(new Configuration({
-            basePath: appConfig.endpoint(),
-            apiKey: String(authStore.token)
-        }))
     }
 
-    @action createTopic = (request: CreateTopicRequest): Promise<Topic> => {
-        return this.apiClient.createTopic(request)
+    @action async createTopic(request: CreateTopicRequest): Promise<void> {
+        await this.getApiClient().createTopic(request)
+        await this.retrieveTopics()
     }
 
-    @action async retrieveTopics() {
+    @action async updateTopic(request: UpdateTopicRequest): Promise<void> {
+        await this.getApiClient().updateTopic(request)
+        await this.retrieveTopics()
+    }
+
+    @action async deleteTopic(topicId: number): Promise<void> {
+        await this.getApiClient().deleteTopic({topicId})
+        await this.retrieveTopics()
+    }
+
+    @action async retrieveTopics(): Promise<void> {
         if (!this.authStore.isLoggedIn) {
-            console.warn('Unauthorized user can not see topics')
             return
         }
+        let topics = await this.getApiClient().getUserTopics()
+        console.log('Topics retrived successfully', topics)
+        this.topics = topics
+    }
 
-        this.apiClient.getUserTopics().then((topics: Array<Topic>) => {
-            console.log('Topics retrived successfully', topics)
-            this.topics = topics
-        }).catch((error: any) => {
-            console.error('Topics retrieving failed', error)
-        })
+    private getApiClient() {
+        return new DefaultApi(new Configuration({
+            basePath: appConfig.endpoint(),
+            apiKey: String(this.authStore.token)
+        }))
     }
 }
 

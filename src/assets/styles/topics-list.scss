@@ -1,0 +1,35 @@
+.tw-topic-list__item {
+    display: flex;
+    .tw-topic-list__play-button-container {
+        padding-right: $gutter;
+        .tw-topic-play-pause-button {
+            font-size: 64px;
+        }
+    }
+    .tw-topic-list__name-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 0 $gutter;
+    }
+    .tw-topic-list__streams-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 $gutter;
+        flex: 2;
+        .ant-tag {
+            margin-top: 3.5px;
+            margin-bottom: 3.5px;
+        }
+    }
+    .tw-topic-list__delete-button-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding-left: $gutter;
+    }
+}

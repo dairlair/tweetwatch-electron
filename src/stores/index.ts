@@ -1,16 +1,16 @@
-import ObjectStore from "./ObjectStore";
-import TopicStore from "./TopicStore";
-import CommonStore from "./CommonStore";
-import AuthStore from "./AuthStore";
+import AuthStore from "./AuthStore"
+import CommonStore from "./CommonStore"
+import StreamStore from "./StreamStore"
+import TopicStore from "./TopicStore"
 
 const authStore: AuthStore = new AuthStore()
-const topicStore: TopicStore = new TopicStore(authStore, [])
 const commonStore: CommonStore = new CommonStore()
-const objectStore: ObjectStore = new ObjectStore([])
+const streamStore: StreamStore = new StreamStore(authStore, {})
+const topicStore: TopicStore = new TopicStore(authStore, [])
 
 export const stores = {
-    objectStore: objectStore,
-    topicStore: topicStore,
-    commonStore: commonStore,
     authStore: authStore,
+    commonStore: commonStore,
+    streamStore: streamStore,
+    topicStore: topicStore,
 }

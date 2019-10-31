@@ -1,9 +1,10 @@
 import React from 'react'
 import CreateTopicForm from '../components/CreateTopicForm'
+import { PageHeaderWidget } from '../components/widgets'
 
 const CreateTopicPage = () => (
   <div>
-    <h1>Create topic</h1>
+    <PageHeaderWidget title="Create topic"></PageHeaderWidget>
     <CreateTopicForm />
   </div>
 )

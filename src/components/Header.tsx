@@ -8,7 +8,8 @@ import { observer, inject } from 'mobx-react';
 @observer
 class Header extends Component<{authStore?: IAuthStore}> {
   state = {
-    current: 'dashboard',
+    // @TODO Retrive current state from matched route
+    current: 'topics',
   };
 
   private handleClick = (e: { key: any; }) => {
@@ -27,10 +28,6 @@ class Header extends Component<{authStore?: IAuthStore}> {
         <Menu.Item key="dashboard">
           Dashboard
           <Link to="/" />
-        </Menu.Item>
-        <Menu.Item key="objects">
-          Objects
-          <Link to="/objects" />
         </Menu.Item>
         {this.props.authStore && this.props.authStore.isLoggedIn &&
           <Menu.Item key="topics">
